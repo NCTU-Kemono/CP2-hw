@@ -4,20 +4,28 @@ using namespace std;
 
 vector<vector<int> > adj;
 int color[1005];
-int ans1, ans2;
+int ans1, ans2, ans, cnt;
 
-void dfs(int x){
-    for(int i = 0; i < adj[x].size(); i++){
-        int y = adj[x][i];
-        if(color[y] == INF){
-            color[y] = 1 - color[x];
-            if(color[y] == 1) ans1++;
-            if(color[y] == 0) ans2++;
-            dfs(y);
-        }
-        else if(color[y] == color[x]){
-            ans1 = ans2 = -1;
-            return;
+void bfs(int x){
+    color[x] = 1;
+    ans1++;
+    queue<int> q;
+    q.push(x);
+    while(q.size()){
+        int y = q.front(); q.pop();
+        for(int i = 0; i < adj[y].size(); i++){
+            int j = adj[y][i];
+            if(color[j] == INF){
+                color[j] = 1 - color[y];
+                if(color[j] == 1) ans1++;
+                if(color[j] == 0) ans2++;
+                q.push(j);
+            }
+            else if(color[j] == color[y]){
+                ans1 = ans2 = -1;
+                return;
+            }
+
         }
     }
 }
@@ -30,7 +38,7 @@ int main(){
         adj.clear();
         adj.resize(n+1);
         memset(color, INF, sizeof(color));
-        ans1 = ans2 = 0;
+        ans1 = ans2 = ans = cnt = 0;
         for(int i = 0; i < m; i++){
             cin >> a >> b;
             adj[a].push_back(b);
@@ -38,15 +46,22 @@ int main(){
         }
         for(int i = 1; i <= n; i++){
             if(color[i] == INF){
-                color[i] = 1;
-                ans1++;
-                dfs(i);
+                ans1 = ans2 = 0;
+                bfs(i);
                 if(ans1 < 0) break;
+                if(ans1 > ans2) ans += ans1, cnt++;
+                else if(ans2 > ans1) ans += ans2, cnt++;
+                else ans += ans1; 
             }
         }
         if(ans1 < 0) cout << -1 << '\n';
-        else
-            cout << max(ans1, ans2) << '\n';
+        else{
+            if(cnt % 2) ans -= (cnt-1)/2;
+            else ans -= cnt/2;
+            n -= ans + ans - 1;
+            if(n%2) cout << ans + n/2 << '\n';
+            else cout << ans + (n+1)/2 << '\n';
+        }
     }
     return 0;
 }
