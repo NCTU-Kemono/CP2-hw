@@ -10,13 +10,13 @@ LL dp[2000000];
 
 LL solve(int a, int state) {
 
-	if (dp[state]) return dp[state];
+	if (dp[state] != -1) return dp[state];
 
 	LL sum = 0;	
 	for (int i = 0; i < n; i ++) {
 		if (x[a - 1][i]) continue;
 		if (state & (1 << i)) {
-			sum += solve(a - 1, state & (~(1 << i)));
+			sum += solve(a - 1, state ^ (1 << i));
 		}
 	}
 	return dp[state] = sum;
@@ -31,7 +31,7 @@ int main() {
 	while (T --) {
 		cin >> n >> X;
 		memset(x, 0, sizeof(x));
-		memset(dp, 0, sizeof(dp));
+		memset(dp, -1, sizeof(dp));
 
 		int a, b;
 		for (int i = 0; i < X; i ++) {
