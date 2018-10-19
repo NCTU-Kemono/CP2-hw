@@ -4,6 +4,7 @@ typedef pair<int, int> pii;
 typedef long long LL;
 
 const LL INF = 0x3f3f3f3f3f3f3f3f;
+int inq[50005] = {0};
 
 int main() {
     ios_base::sync_with_stdio(false);
@@ -33,10 +34,11 @@ int main() {
 
     queue<int> q;
     q.push(s);
+	inq[s] = 1;
 
     int cur;
     while (q.size()) {
-        cur = q.front(); q.pop();
+        cur = q.front(); q.pop(); inq[cur] = 0;
         for (int i = 0; i < g[cur].size(); i ++) {
             pii nxt = g[cur][i];
             bool change = 0;
@@ -54,7 +56,10 @@ int main() {
                     d[nxt.first][1] = d[cur][0] + nxt.second;
                     change = 1;
                 }
-            if(change) q.push(nxt.first);
+            if(change && !inq[nxt.first]) {
+				q.push(nxt.first);
+				inq[nxt.first] = 1;
+			}
         }
     }
     
