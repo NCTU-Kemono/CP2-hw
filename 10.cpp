@@ -66,7 +66,7 @@ int main(){
         memset(dp, 0, sizeof(dp));
         dp[0][0] = 1;
         for(int i = 1; i < b1.size(); i++){
-            for(int j = 1000; j >= b1[i]; j--){
+            for(int j = 1000; j >= b1[i]; j --){
                 if(dp[i-1][j-b1[i]]) dp[i][j] = 1;
             }
             for(int j = 1000; j >= b2[i]; j --){
