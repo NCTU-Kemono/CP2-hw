@@ -36,7 +36,7 @@ int main() {
 
 		pii dist[n];
 		for(int i = 0; i < n; i++)
-			dist[i].F = -1, dist[i].S = 1;
+			dist[i].F = 0, dist[i].S = 1;
 		dist[s].F = 1;
 		
 		//priority_queue<pfi, vector<pfi>, less<pfi> > pq;
@@ -49,9 +49,9 @@ int main() {
 			int cur = qu.front(); qu.pop();
 			for(int i = 0; i < g[cur].size(); i ++) {
 				edge nxt = g[cur][i]; //to, p, q, f
-				if (dist[nxt.to].F / (float)dist[nxt.to].S < dist[cur].F / dist[cur].S * nxt.f){
-					dist[nxt.to].F *= nxt.p;
-					dist[nxt.to].S *= nxt.q;
+				if (dist[nxt.to].F / (float)dist[nxt.to].S < dist[cur].F / (float)dist[cur].S * nxt.f){
+					dist[nxt.to].F = dist[cur].F * nxt.p;
+					dist[nxt.to].S = dist[cur].S * nxt.q;
 					int gcd = __gcd(dist[nxt.to].F, dist[nxt.to].S);
 					dist[nxt.to].F /= gcd;
 					dist[nxt.to].S /= gcd;
