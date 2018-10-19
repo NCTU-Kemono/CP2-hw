@@ -24,7 +24,6 @@ int main() {
     for (int i = 0; i < f; i ++) {
         cin >> u >> v;
         g[u].push_back(pii(v, 0));
-        g[v].push_back(pii(u, 0));
     }
 
     LL d[c][2];
