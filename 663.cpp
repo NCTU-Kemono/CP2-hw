@@ -5,6 +5,8 @@ using namespace std;
 typedef pair<float, int> pfi;
 typedef pair<int, int> pii;
 
+int inq[1005];
+
 struct edge {
 	int to;
 	int p, q;
@@ -27,6 +29,7 @@ int main() {
 	while (T --) {
 		cin >> n >> s >> t >> e;
 		g.clear(); g.resize(n);
+		memset(inq, 0, sizeof(inq));
 
 		int u, v, p, q;
 		for (int i = 0; i < e; i ++) {
@@ -44,9 +47,10 @@ int main() {
 		
 		queue<int> qu;
 		qu.push(s);
+		inq[s] = 1;
 
 		while(qu.size()){
-			int cur = qu.front(); qu.pop();
+			int cur = qu.front(); qu.pop(); inq[cur] = 0;
 			for(int i = 0; i < g[cur].size(); i ++) {
 				edge nxt = g[cur][i]; //to, p, q, f
 				if (dist[nxt.to].F / (float)dist[nxt.to].S < dist[cur].F / (float)dist[cur].S * nxt.f){
@@ -55,7 +59,10 @@ int main() {
 					int gcd = __gcd(dist[nxt.to].F, dist[nxt.to].S);
 					dist[nxt.to].F /= gcd;
 					dist[nxt.to].S /= gcd;
-					qu.push(nxt.to);
+					if (!inq[nxt.to]) {
+						qu.push(nxt.to);
+						inq[nxt.to] = 1;
+					}
 				}
 			}
 		}
